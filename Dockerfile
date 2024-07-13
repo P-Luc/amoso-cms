@@ -1,3 +1,11 @@
-# Use the official Directus image as a base
-FROM directus/directus:latest
-
+# syntax=docker/dockerfile:1.4
+FROM directus/directus
+USER root
+RUN corepack enable \
+&& corepack prepare pnpm@8.7.6 --activate \
+&& chown node:node /directus
+EXPOSE 8055
+USER node
+CMD : \
+&& node /directus/cli.js bootstrap \
+&& node /directus/cli.js start;
