@@ -1,0 +1,39 @@
+services:
+  directus:
+    build: .
+    restart: always
+    ports:
+      - 8055:8055
+    environment:
+      SECRET: "${SECRET}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
+      DB_CLIENT: "${DB_CLIENT}"
+      DB_FILENAME: "${DB_FILENAME}"
+      DB_CONNECTION_STRING: "${DB_CONNECTION_STRING}"
+      DATABASE_SSL_CA_FILE: "/certs/ca-certificate.crt"
+    volumes:
+      - ./database:/directus/database
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+      - ./templates:/directus/templates
+      - ./certs/ca-certificate.crt:/certs/ca-certificate.crt
+    networks:
+      - directus
+
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
+    volumes:
+      - ./database/pg:/var/lib/postgresql/data
+    networks:
+      - directus
+
+networks:
+    directus:
+        driver: bridge

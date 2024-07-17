@@ -1,11 +1,8 @@
 # syntax=docker/dockerfile:1.4
 FROM directus/directus
-USER root
-RUN corepack enable \
-&& corepack prepare pnpm@8.7.6 --activate \
-&& chown node:node /directus
-EXPOSE 8055
-USER node
-CMD : \
-&& node /directus/cli.js bootstrap \
-&& node /directus/cli.js start;
+COPY ./certs/ca-certificate.crt /certs/ca-certificate.crt
+COPY ./extensions /directus/extensions
+COPY ./templates /directus/templates
+COPY ./uploads /directus/uploads
+ENV NODE_EXTRA_CA_CERTS=/certs/ca-certificate.crt
+

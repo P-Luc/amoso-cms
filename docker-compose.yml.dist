@@ -1,0 +1,17 @@
+services:
+  directus:
+    build: .
+    ports:
+      - 8055:8055
+    environment:
+      SECRET: "${SECRET}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
+      DB_CLIENT: "${DB_CLIENT}"
+      DB_FILENAME: "${DB_FILENAME}"
+
+    volumes:
+      - ./database:/directus/database
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+      - ./templates:/directus/templates
